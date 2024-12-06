@@ -1,0 +1,61 @@
+import { Button, VerticalBox, LineEdit } from "std-widgets.slint";
+
+export struct UIUser {
+    name: string,
+    avatar_url: image,
+}
+
+export component AppWindow inherits Window {
+    // in-out property <int> counter: 42;
+    callback find_user(string);
+
+    in property <UIUser> user;
+
+    title: "GitHub powers!";
+
+    width: 400px;
+    height: 300px;
+    VerticalLayout {
+        spacing: 10px;
+        padding: 10px;
+
+        HorizontalLayout {
+            height: 30px;
+
+            spacing: 10px;
+
+            user-name := LineEdit {
+                text: "";
+                placeholder-text: "Enter user name";
+                font-size: 16px;
+            }
+
+            Button {
+                text: "Button";
+
+                clicked => {
+                    root.find-user(user-name.text);
+                }
+            }
+        }
+
+        HorizontalLayout {
+            spacing: 10px;
+
+            Text {
+                text: "User name:";
+            }
+
+            Text {
+                text: user.name;
+            }
+        }
+
+        Image {
+            source: user.avatar_url;
+
+            width: 100px;
+            height: 100px;
+        }
+    }
+}
