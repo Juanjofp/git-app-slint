@@ -1,61 +1,50 @@
-import { Button, VerticalBox, LineEdit } from "std-widgets.slint";
-
-export struct UIUser {
-    name: string,
-    avatar_url: image,
-}
+import { Button, VerticalBox, LineEdit, ListView } from "std-widgets.slint";
+import {UIUser, UserSlot} from "./user-slot.slint";
+import {FindUser} from "./find-user.slint";
 
 export component AppWindow inherits Window {
-    // in-out property <int> counter: 42;
-    callback find_user(string);
+    in property <bool> is_loading: false;
+    in property <[UIUser]> users;
 
-    in property <UIUser> user;
+    callback user_selected(string);
+    callback find_user(string);
 
     title: "GitHub powers!";
 
-    width: 400px;
-    height: 300px;
+    width: 500px;
+    height: 900px;
+
     VerticalLayout {
+        min-width: 0cm;
+        preferred-width: 0cm;
         spacing: 10px;
         padding: 10px;
 
-        HorizontalLayout {
+        find_user := FindUser {
             height: 30px;
 
-            spacing: 10px;
+            find_user(name) => {
+                debug("Finding user", name);
 
-            user-name := LineEdit {
-                text: "";
-                placeholder-text: "Enter user name";
-                font-size: 16px;
+                root.find_user(name);
             }
+        }
 
-            Button {
-                text: "Button";
+        if is_loading: Text {
+            text: "Loading...";
+        }
 
-                clicked => {
-                    root.find-user(user-name.text);
+        ListView {
+
+            for user in users: UserSlot {
+                user: user;
+
+                user_selected(name) => {
+                    debug("User selected", name);
+
+                    root.user_selected(name);
                 }
             }
-        }
-
-        HorizontalLayout {
-            spacing: 10px;
-
-            Text {
-                text: "User name:";
-            }
-
-            Text {
-                text: user.name;
-            }
-        }
-
-        Image {
-            source: user.avatar_url;
-
-            width: 100px;
-            height: 100px;
         }
     }
 }

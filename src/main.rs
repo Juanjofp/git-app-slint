@@ -3,7 +3,7 @@
 
 use std::{error::Error, rc::Rc};
 
-use slint::{Image, SharedString};
+use slint::{Image, ModelRc, SharedString, VecModel};
 
 use file_downloader::Downloader;
 use git_info::GitInfo;
@@ -19,14 +19,22 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let downloader = Rc::new(downloader);
 
+    // let users = ModelRc::new();
+    let users_model = Rc::new(VecModel::from(vec![]));
+
     let ui = AppWindow::new()?;
+
+    ui.set_users(ModelRc::from(users_model.clone()));
 
     let git_info_clone = Rc::clone(&git_info);
     let downloader_clone = Rc::clone(&downloader);
+
     ui.on_find_user({
         let ui_clone = ui.as_weak();
 
         move |user_name: SharedString| {
+            ui_clone.upgrade().unwrap().set_is_loading(true);
+
             println!("User name: {}", user_name);
 
             let user = git_info_clone.user(user_name.as_str());
@@ -40,11 +48,16 @@ fn main() -> Result<(), Box<dyn Error>> {
 
                 println!("Avatar URL: {:?}", avatar_url);
 
-                ui_clone.upgrade().unwrap().set_user(UIUser {
-                    name: SharedString::from(user.name),
+                //ui_clone.upgrade().unwrap()
 
+                let user = UIUser {
+                    name: SharedString::from(user.name),
                     avatar_url: Image::load_from_path(&avatar_url).unwrap(),
-                });
+                };
+
+                users_model.push(user);
+
+                ui_clone.upgrade().unwrap().set_is_loading(false);
             } else {
                 println!("User not found");
             }

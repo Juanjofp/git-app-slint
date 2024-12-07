@@ -1,0 +1,29 @@
+import { LineEdit, Button } from "std-widgets.slint";
+
+export component FindUser {
+    callback find_user(string);
+
+    HorizontalLayout {
+        height: 30px;
+
+        spacing: 10px;
+
+        user-name := LineEdit {
+            text: "";
+            placeholder-text: "Enter user name";
+            font-size: 16px;
+
+            accepted => {
+                root.find_user(user-name.text);
+            }
+        }
+
+        Button {
+            text: "Buscar";
+
+            clicked => {
+                root.find-user(user-name.text);
+            }
+        }
+    }
+}

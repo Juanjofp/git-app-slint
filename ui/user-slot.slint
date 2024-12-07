@@ -1,0 +1,80 @@
+export struct UIUser {
+  name: string,
+  avatar_url: image,
+}
+
+export component UserSlot inherits VerticalLayout {
+    in property <UIUser> user;
+
+    callback user_selected(string);
+
+    Rectangle {
+        border-color: greenyellow;
+        border-width: 2px;
+        border-radius: 8px;
+
+        background: mysurface.pressed || mysurface.has-hover ? #d7e9adac : transparent;
+
+        HorizontalLayout {
+            spacing: 10px;
+            padding: 10px;
+
+            Rectangle {
+                width: 100px;
+                height: 100px;
+
+                border-radius: 50px;
+                clip: true;
+
+                Image {
+                    source: user.avatar_url;
+
+                    width: 100px;
+                    height: 100px;
+                }
+            }
+
+            VerticalLayout {
+                HorizontalLayout {
+                    Text {
+                        text: "User name:";
+                    }
+
+                    Text {
+                        text: user.name;
+                    }
+                }
+
+                HorizontalLayout {
+                    Text {
+                        text: "User name:";
+                    }
+
+                    Text {
+                        text: user.name;
+                    }
+
+                    Text {
+                        text: "User name:";
+                    }
+
+                    Text {
+                        text: user.name;
+                    }
+                }
+            }
+        }
+
+        mysurface := TouchArea {
+            mouse-cursor: MouseCursor.pointer;
+
+            clicked => {
+                root.user_selected(user.name);
+            }
+        }
+    }
+
+    Rectangle {
+        height: 8px;
+    }
+}
