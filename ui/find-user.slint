@@ -1,7 +1,8 @@
-import { LineEdit, Button } from "std-widgets.slint";
+import { LineEdit, Button, Spinner } from "std-widgets.slint";
 
 export component FindUser {
     callback find_user(string);
+    in property <bool> is_loading: false;
 
     HorizontalLayout {
         height: 30px;
@@ -13,17 +14,24 @@ export component FindUser {
             placeholder-text: "Enter user name";
             font-size: 16px;
 
+            enabled: !is_loading;
+
             accepted => {
                 root.find_user(user-name.text);
             }
         }
 
-        Button {
+        if !is_loading: Button {
             text: "Buscar";
 
             clicked => {
                 root.find-user(user-name.text);
+                user-name.text = "";
             }
+        }
+
+        if is_loading: Spinner {
+            indeterminate: true;
         }
     }
 }

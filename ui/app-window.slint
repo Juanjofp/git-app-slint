@@ -23,6 +23,8 @@ export component AppWindow inherits Window {
         find_user := FindUser {
             height: 30px;
 
+            is_loading: is_loading;
+
             find_user(name) => {
                 debug("Finding user", name);
 
@@ -30,8 +32,8 @@ export component AppWindow inherits Window {
             }
         }
 
-        if is_loading: Text {
-            text: "Loading...";
+        Text {
+            text: "Total users: " + users.length;
         }
 
         ListView {
