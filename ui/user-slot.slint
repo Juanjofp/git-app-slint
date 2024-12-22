@@ -1,6 +1,13 @@
 export struct UIUser {
   name: string,
+  nickname: string,
   avatar_url: image,
+
+  repo_count: string,
+  follower_count: string,
+  following_count: string,
+  gist_count: string,
+  collaborator_count: string,
 }
 
 export component UserSlot inherits VerticalLayout {
@@ -35,31 +42,64 @@ export component UserSlot inherits VerticalLayout {
             }
 
             VerticalLayout {
-                HorizontalLayout {
-                    Text {
-                        text: "User name:";
-                    }
+                Text {
+                    text: user.name;
+                    font-size: 24px;
+                }
 
-                    Text {
-                        text: user.name;
-                    }
+                Text {
+                    text: user.nickname;
+                    font-size: 18px;
                 }
 
                 HorizontalLayout {
-                    Text {
-                        text: "User name:";
+                    spacing: 5px;
+                    Image {
+                        source: @image-url("images/repo.svg");
+                        width: 24px;
+                        height: 24px;
                     }
 
                     Text {
-                        text: user.name;
+                        font-size: 18px;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        text: user.repo_count;
+                    }
+
+                    Image {
+                        source: @image-url("images/repo.svg");
+                        width: 24px;
+                        height: 24px;
                     }
 
                     Text {
-                        text: "User name:";
+                        font-size: 18px;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        text: user.gist_count;
+                    }
+
+                    Image {
+                        source: @image-url("images/repo.svg");
+                        width: 24px;
+                        height: 24px;
                     }
 
                     Text {
-                        text: user.name;
+                        font-size: 18px;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        text: user.follower_count;
+                    }
+
+                    Image {
+                        source: @image-url("images/repo.svg");
+                        width: 24px;
+                        height: 24px;
+                    }
+
+                    Text {
+                        font-size: 18px;
+                        vertical-alignment: TextVerticalAlignment.center;
+                        text: user.following_count;
                     }
                 }
             }
@@ -69,7 +109,7 @@ export component UserSlot inherits VerticalLayout {
             mouse-cursor: MouseCursor.pointer;
 
             clicked => {
-                root.user_selected(user.name);
+                root.user_selected(user.nickname);
             }
         }
     }

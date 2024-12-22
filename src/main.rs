@@ -6,7 +6,7 @@ mod uc_find_user;
 use std::{error::Error, sync::Arc};
 
 use file_downloader::UreqDownloader as Downloader;
-use git_info::GitInfo;
+use git_info::GitInfoAnonymousUReq as GitInfo;
 
 slint::include_modules!();
 

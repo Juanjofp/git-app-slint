@@ -30,18 +30,36 @@ impl UCFindUser {
                 std::thread::spawn(move || {
                     let user = git_info_clone.user(user_name.as_str());
 
-                    // Just to simulate a long running operation
-                    std::thread::sleep(std::time::Duration::from_secs(5));
-
                     if let Ok(user) = user {
-                        let avatar_url = downloader_clone.download(&user.avatar).unwrap();
+                        let avatar_url = downloader_clone.download(&user.user.avatar).unwrap();
 
                         let avatar_url = avatar_url.file;
 
+                        let name = user.name.map_or("Jhon Doe".to_string(), |name| name);
+
+                        let nickname = user.user.login.clone();
+
                         slint::invoke_from_event_loop(move || {
                             let user = UIUser {
-                                name: SharedString::from(user.name),
+                                nickname: SharedString::from(nickname),
+                                name: SharedString::from(name),
                                 avatar_url: Image::load_from_path(&avatar_url).unwrap(),
+
+                                repo_count: SharedString::from(
+                                    user.repo_info.public_repos.to_string(),
+                                ),
+                                follower_count: SharedString::from(
+                                    user.repo_info.followers.to_string(),
+                                ),
+                                following_count: SharedString::from(
+                                    user.repo_info.following.to_string(),
+                                ),
+                                collaborator_count: SharedString::from(
+                                    user.repo_info.collaborators.to_string(),
+                                ),
+                                gist_count: SharedString::from(
+                                    user.repo_info.public_gists.to_string(),
+                                ),
                             };
 
                             let ui = ui_for_thread.unwrap();
